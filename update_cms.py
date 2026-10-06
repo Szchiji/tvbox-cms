@@ -2,8 +2,10 @@
 """Probe MacCMS endpoints and rewrite tvbox_cms.json.
 
 Rules:
-- Existing sites keep their key, name and all flags (searchable/quickSearch are
-  never changed by this script; search is curated by hand).
+- Existing sites are kept verbatim (key, name, flags, categories and any other
+  fields) in their current order; searchable/quickSearch are never changed by
+  this script (search is curated by hand). Several entries may share one api
+  (e.g. the "奈飞·xxx" category views), so existing entries dedupe by key.
 - Newly discovered live sites are appended with searchable=0, quickSearch=0.
 - Timeouts/errors keep the existing entry; only clearly broken responses drop it.
 - Adult / blocked sources are never added (and are removed if present).
@@ -156,11 +158,12 @@ def main():
         results = list(pool.map(lambda v: probe(*v), targets.values()))
     status = {norm(api): (st, info) for _, api, st, info in results}
 
-    picked, seen = [], set()
-    # 1) existing sites, in their current order, with flags untouched
+    picked, seen, seen_keys = [], set(), set()
+    # 1) existing sites, in their current order, kept verbatim
     for s in old_sites:
         key = norm(s.get("api"))
-        if not key or key in seen:
+        site_key = s.get("key")
+        if not key or not site_key or site_key in seen_keys:
             continue
         if blocked(s.get("name"), s.get("api")):
             print("BLOCK", s.get("name"))
@@ -169,6 +172,7 @@ def main():
         if st in ("ok", "keep"):
             picked.append(s)
             seen.add(key)
+            seen_keys.add(site_key)
             print(st.upper(), s.get("name"), "searchable=%s" % s.get("searchable", 0), info)
         else:
             print("DROP", s.get("name"), info)
