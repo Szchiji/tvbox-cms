@@ -96,7 +96,9 @@ def blocked(name, api):
 
 
 def norm(api):
-    return (api or "").rstrip("/")
+    # Ignore the query string (e.g. "?from=xxm3u8", used to keep only the
+    # direct-m3u8 play group) so a tuned entry still matches its candidate.
+    return (api or "").split("?", 1)[0].rstrip("/")
 
 
 def probe(name, api):
