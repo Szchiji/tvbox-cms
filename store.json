@@ -1,20 +1,32 @@
 {
   "urls": [
     {
-      "name": "4K·小盒子",
-      "url": "http://xhztv.top/4k.json"
+      "name": "饭太硬",
+      "url": "https://cdn09022024.gitlink.org.cn/api/v1/repos/xxooo/in/raw/in.bmp"
     },
     {
-      "name": "4K·王二小",
+      "name": "王二小·4K",
       "url": "https://9280.kstore.vip/newwex.json"
     },
     {
-      "name": "混合·小盒子",
-      "url": "http://xhztv.top/xhz"
+      "name": "嗷呜",
+      "url": "https://9763.kstore.vip/aowu.json"
+    },
+    {
+      "name": "菜妮丝",
+      "url": "https://tv.xn--yhqu5zs87a.top"
+    },
+    {
+      "name": "南风",
+      "url": "https://gh-proxy.com/raw.githubusercontent.com/yoursmile66/TVBox/refs/heads/main/XC.json"
     },
     {
       "name": "普清·CMS采集",
       "url": "https://ghfast.top/https://raw.githubusercontent.com/Szchiji/tvbox-cms/main/tvbox_cms.json?v=20261006"
+    },
+    {
+      "name": "普清·CMS采集(备用)",
+      "url": "https://gh-proxy.com/https://raw.githubusercontent.com/Szchiji/tvbox-cms/main/tvbox_cms.json"
     }
   ]
 }
