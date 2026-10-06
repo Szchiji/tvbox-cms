@@ -66,6 +66,7 @@ CANDIDATES = [
     ("爱奇艺资源", "https://iqiyizyapi.com/api.php/provide/vod/"),
     ("新浪", "https://api.xinlangapi.com/xinlangapi.php/provide/vod/"),
     ("电影天堂", "http://caiji.dyttzyapi.com/api.php/provide/vod/"),
+    ("电影天堂S", "https://caiji.dyttzyapi.com/api.php/provide/vod/"),
     ("天涯", "https://tyyszy.com/api.php/provide/vod/"),
     ("天涯备用", "https://tyyszyapi.com/api.php/provide/vod/"),
     ("豆瓣资源", "https://caiji.dbzy5.com/api.php/provide/vod/"),
