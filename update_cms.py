@@ -7,8 +7,10 @@ Rules:
   this script (search is curated by hand). Several entries may share one api
   (e.g. the "奈飞·xxx" category views), so existing entries dedupe by key.
 - Newly discovered live sites are appended with searchable=0, quickSearch=0.
-- Timeouts/errors keep the existing entry; only clearly broken responses drop it.
-- Adult / blocked sources are never added (and are removed if present).
+- Timeouts/errors keep the existing entry as is. Clearly broken existing sites
+  are not deleted: they move to the bottom with searchable/quickSearch off.
+- Adult / blocked sources are never added; an existing one (e.g. 玉兔) is kept
+  but always has searchable/quickSearch forced off.
 - Refuses to write if fewer than 8 live sites remain.
 Usage: python update_cms.py [--dry-run] [--out PATH]
 """
@@ -59,8 +61,8 @@ CANDIDATES = [
     ("金鹰", "https://jyzyapi.com/provide/vod/"),
     ("金鹰主站", "https://jinyingzy.com/api.php/provide/vod/"),
     ("速播", "https://subocaiji.com/api.php/provide/vod/"),
-    ("360", "https://360zy.com/api.php/provide/vod/"),
-    ("360备用", "https://360zyzz.com/api.php/provide/vod/"),
+    ("360", "https://360zyzz.com/api.php/provide/vod/"),
+    ("360备用", "https://360zy.com/api.php/provide/vod/"),
     ("茅台", "https://caiji.maotaizy.cc/api.php/provide/vod/"),
     ("茅台备用", "https://caiji.maotai999.vip/api.php/provide/vod/"),
     ("爱奇艺资源", "https://iqiyizyapi.com/api.php/provide/vod/"),
@@ -161,24 +163,30 @@ def main():
         results = list(pool.map(lambda v: probe(*v), targets.values()))
     status = {norm(api): (st, info) for _, api, st, info in results}
 
-    picked, seen, seen_keys = [], set(), set()
+    picked, seen, seen_keys, broken = [], set(), set(), []
     # 1) existing sites, in their current order, kept verbatim
     for s in old_sites:
         key = norm(s.get("api"))
         site_key = s.get("key")
         if not key or not site_key or site_key in seen_keys:
             continue
+        seen.add(key)
+        seen_keys.add(site_key)
         if blocked(s.get("name"), s.get("api")):
-            print("BLOCK", s.get("name"))
+            s["searchable"] = 0
+            s["quickSearch"] = 0
+            print("BLOCKED(kept, search off)", s.get("name"))
+            picked.append(s)
             continue
         st, info = status.get(key, ("keep", "not probed"))
         if st in ("ok", "keep"):
             picked.append(s)
-            seen.add(key)
-            seen_keys.add(site_key)
             print(st.upper(), s.get("name"), "searchable=%s" % s.get("searchable", 0), info)
         else:
-            print("DROP", s.get("name"), info)
+            s["searchable"] = 0
+            s["quickSearch"] = 0
+            broken.append(s)
+            print("BROKEN(moved to bottom, search off)", s.get("name"), info)
     # 2) newly discovered live candidates, search off by default
     used_keys = {s.get("key") for s in picked}
     for name, api in CANDIDATES:
@@ -194,6 +202,9 @@ def main():
             used_keys.add(site["key"])
             seen.add(key)
             print("NEW", name, info)
+
+    # 3) broken existing sites go last (kept so they can come back)
+    picked.extend(broken)
 
     live = sum(1 for s in picked if status.get(norm(s.get("api")), ("",))[0] == "ok")
     if live < 8:
