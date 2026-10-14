@@ -1692,6 +1692,46 @@
       "quickSearch": 1,
       "filterable": 0,
       "changeable": 1
+    }, 
+    {
+      "key": "cms_siwa",
+      "name": "siwa",
+      "type": 1,
+      "api": "http://siwazyw.cc/api.php/provide/vod",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "changeable": 1
+    },
+     {      
+       "key": "cms_aosika",      
+       "name": "奥斯卡",      
+       "type": 1,      
+       "api": "http://aosikazy.com/api.php/provide/vod",      
+       "searchable": 1,      
+       "quickSearch": 1,      
+       "filterable": 0,      
+       "changeable": 1    
+     },
+    {      
+      "key": "cms_laoya",      
+      "name": "老鸭",      
+      "type": 1,      
+      "api": "http://api.apilyzy.com/api.php/provide/vod",      
+      "searchable": 1,      
+      "quickSearch": 1,      
+      "filterable": 0,      
+      "changeable": 1    
+    },
+    {      
+      "key": "cms_senlin",      
+      "name": "森林",      
+      "type": 1,      
+      "api": "http://slapibf.com/api.php/provide/vod",      
+      "searchable": 1,      
+      "quickSearch": 1,      
+      "filterable": 0,      
+      "changeable": 1    
     }
   ],
   "parses": [
